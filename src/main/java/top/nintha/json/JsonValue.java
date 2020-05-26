@@ -2,6 +2,8 @@ package top.nintha.json;
 
 public interface JsonValue {
 
+    String toJson();
+
     default boolean asBoolean(){
         return ((JsonBoolean) this).getValue();
     }

@@ -15,4 +15,9 @@ public class JsonBoolean implements JsonValue {
     public String toString() {
         return String.valueOf(value);
     }
+
+    @Override
+    public String toJson() {
+        return toString();
+    }
 }

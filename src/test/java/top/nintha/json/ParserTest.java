@@ -48,7 +48,7 @@ class ParserTest {
 
     @Test
     void parseNumber() {
-        List<Double> list = List.of(0.0, 123456.0, 99.99, 87.0);
+        List<Double> list = List.of(0.0, 123456.0, 99.99, -87.0, -1.23);
         for (Double expect : list) {
             Parser parser = new Parser(String.valueOf(expect));
             JsonValue value = parser.parse();
@@ -82,5 +82,7 @@ class ParserTest {
         Assertions.assertEquals(0.0, object.get("number").asNumber());
         Assertions.assertTrue(object.get("array").asJsonArray().isEmpty());
         Assertions.assertEquals("hello", object.get("string").asString());
+
+//        System.out.println(object.toJson());
     }
 }

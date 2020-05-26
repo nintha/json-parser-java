@@ -39,6 +39,8 @@ public class Tokenizer {
                 return new Token.BraceOff();
             case '"':
                 return new Token.Text(readText(c));
+            case '-':
+                return new Token.Num(readNum(c));
             default:
                 if (c >= '0' && c <= '9') {
                     return new Token.Num(readNum(c));
@@ -128,14 +130,4 @@ public class Tokenizer {
                 throw new RuntimeException("Invalid label: " + label);
         }
     }
-
-
-    public static void main(String[] args) {
-        Token token1 = new Token.Colon();
-        Token token2 = new Token.Text("username");
-
-//        System.out.println(colon.getClass().getName());
-    }
-
-
 }

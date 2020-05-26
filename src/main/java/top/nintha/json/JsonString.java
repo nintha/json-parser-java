@@ -15,4 +15,9 @@ public class JsonString implements JsonValue {
     public String toString() {
         return value;
     }
+
+    @Override
+    public String toJson() {
+        return "\"" + value + "\"";
+    }
 }
