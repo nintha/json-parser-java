@@ -82,7 +82,5 @@ class ParserTest {
         Assertions.assertEquals(0.0, object.get("number").asNumber());
         Assertions.assertTrue(object.get("array").asJsonArray().isEmpty());
         Assertions.assertEquals("hello", object.get("string").asString());
-
-//        System.out.println(object.toJson());
     }
 }

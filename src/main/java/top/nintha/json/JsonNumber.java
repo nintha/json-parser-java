@@ -1,7 +1,5 @@
 package top.nintha.json;
 
-import java.util.HashMap;
-
 public class JsonNumber implements JsonValue {
     private double value = 0.0;
 

@@ -1,15 +1,10 @@
 package top.nintha.json;
 
-import java.io.IOException;
-import java.io.PushbackReader;
-import java.io.StringReader;
-
 public class Parser {
     private final Tokenizer tokenizer;
 
     public Parser(String json) {
-        StringReader reader = new StringReader(json);
-        this.tokenizer = new Tokenizer(new PushbackReader(reader));
+        this.tokenizer = new Tokenizer(json);
     }
 
     public JsonValue parse() {
@@ -17,12 +12,7 @@ public class Parser {
     }
 
     private Token step() {
-        Token token = null;
-        try {
-            token = tokenizer.next();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Token token = tokenizer.next();
         if (token == null) {
             throw new RuntimeException("Unexpected end of JSON");
         }

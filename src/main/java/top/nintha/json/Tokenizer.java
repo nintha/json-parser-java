@@ -1,20 +1,18 @@
 package top.nintha.json;
 
-import java.io.IOException;
-import java.io.PushbackReader;
+import top.nintha.json.util.TextCharIterator;
 
 public class Tokenizer {
 
-    private final PushbackReader reader;
+    private final TextCharIterator iterator;
 
-    public Tokenizer(PushbackReader reader) {
-        this.reader = reader;
+    public Tokenizer(String text) {
+        this.iterator = new TextCharIterator(text);
     }
 
-    public Token next() throws IOException {
-        int v;
-        while ((v = reader.read()) != -1) {
-            char c = (char) v;
+    public Token next() {
+        while (iterator.hasNext()) {
+            char c = iterator.next();
             if (Character.isWhitespace(c)) {
                 continue;
             }
@@ -23,7 +21,7 @@ public class Tokenizer {
         return null;
     }
 
-    private Token charToToken(char c) throws IOException {
+    private Token charToToken(char c) {
         switch (c) {
             case ',':
                 return new Token.Comma();
@@ -54,12 +52,11 @@ public class Tokenizer {
         }
     }
 
-    private String readText(char first) throws IOException {
+    private String readText(char first) {
         StringBuilder sb = new StringBuilder();
         boolean escape = false;
-        int v;
-        while ((v = reader.read()) != -1) {
-            char c = (char) v;
+        while (iterator.hasNext()) {
+            char c = iterator.next();
             if (c == first && !escape) {
                 return sb.toString();
             }
@@ -77,44 +74,42 @@ public class Tokenizer {
         return sb.toString();
     }
 
-    private double readNum(char first) throws IOException {
+    private double readNum(char first) {
         StringBuilder sb = new StringBuilder(String.valueOf(first));
         boolean point = false;
-        int v;
-        while ((v = reader.read()) != -1) {
-            char c = (char) v;
+        while (iterator.hasNext()) {
+            char c = iterator.peek();
             // number
             if (c >= '0' && c <= '9') {
                 sb.append(c);
+                iterator.next();
             }
             // point
             else if (c == '.') {
                 if (point) {
-                    reader.unread(c);
                     return Double.parseDouble(sb.toString());
                 } else {
                     point = true;
                     sb.append(c);
+                    iterator.next();
                 }
             }
             // other char
             else {
-                reader.unread(c);
                 return Double.parseDouble(sb.toString());
             }
         }
         return Double.parseDouble(sb.toString());
     }
 
-    private Token readSymbol(char first) throws IOException {
+    private Token readSymbol(char first) {
         StringBuilder sb = new StringBuilder(String.valueOf(first));
-        int v;
-        while ((v = reader.read()) != -1) {
-            char c = (char) v;
+        while (iterator.hasNext()) {
+            char c = iterator.peek();
             if (c >= 'a' && c <= 'z') {
                 sb.append(c);
+                iterator.next();
             } else {
-                reader.unread(c);
                 break;
             }
         }
