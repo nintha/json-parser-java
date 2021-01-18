@@ -1,8 +1,10 @@
 package top.nintha.json.util;
 
-public interface Peekable<T> {
+public interface CharPeekable {
     /**
      * get an element, but not consume it.
      */
-    T peek();
+    char peek();
+
+    boolean hasNext();
 }

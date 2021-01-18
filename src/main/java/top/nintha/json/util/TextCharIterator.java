@@ -1,8 +1,8 @@
 package top.nintha.json.util;
 
-import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public class TextCharIterator implements Peekable<Character>, Iterator<Character> {
+public class TextCharIterator implements CharPeekable {
     private final char[] chars;
     private int readIndex = 0;
 
@@ -15,13 +15,15 @@ public class TextCharIterator implements Peekable<Character>, Iterator<Character
         return readIndex < chars.length;
     }
 
-    @Override
-    public Character next() {
-        return hasNext() ? chars[readIndex++] : null;
+    public char next() {
+        if (!hasNext()) {
+            throw new NoSuchElementException();
+        }
+        return chars[readIndex++];
     }
 
     @Override
-    public Character peek() {
+    public char peek() {
         return chars[readIndex];
     }
 }

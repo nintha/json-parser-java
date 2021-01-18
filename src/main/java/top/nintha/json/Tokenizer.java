@@ -1,5 +1,7 @@
 package top.nintha.json;
 
+import top.nintha.json.util.HexUtils;
+import top.nintha.json.util.JsonEscapeChar;
 import top.nintha.json.util.TextCharIterator;
 
 public class Tokenizer {
@@ -61,11 +63,15 @@ public class Tokenizer {
                 return sb.toString();
             }
 
-            if (c == '\\') {
-                if (escape) {
-                    sb.append(c);
+            if (escape) {
+                if (c == 'u') {
+                    sb.append(readUnicode());
+                } else {
+                    sb.append(JsonEscapeChar.fromLiteral(c));
                 }
-                escape = !escape;
+                escape = false;
+            } else if (c == '\\') {
+                escape = true;
             } else {
                 sb.append(c);
             }
@@ -73,6 +79,17 @@ public class Tokenizer {
 
         return sb.toString();
     }
+
+    /**
+     * 0x10000 + (前导-0xD800) * 0x400 + (后导-0xDC00) = utf-16编码
+     */
+    private String readUnicode() {
+        char[] high = {iterator.next() , iterator.next()};
+        char[] low = {iterator.next() , iterator.next()};
+        int point = (HexUtils.hexCharPairToByte(high) & 0xFF) * 256 + (HexUtils.hexCharPairToByte(low) & 0xFF);
+        return Character.toString(point);
+    }
+
 
     private double readNum(char first) {
         StringBuilder sb = new StringBuilder(String.valueOf(first));

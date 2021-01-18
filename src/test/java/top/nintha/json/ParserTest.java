@@ -20,6 +20,26 @@ class ParserTest {
     }
 
     @Test
+    void parseUnicodeText() {
+        String text = "\\u5f20\\u4e09"; // "张三"
+        Parser parser = new Parser("\"" + text + "\"");
+        JsonValue value = parser.parse();
+        Assertions.assertTrue(value instanceof JsonString);
+        JsonString str = (JsonString) value;
+        Assertions.assertEquals("张三", str.toString());
+    }
+
+    @Test
+    void parseEmojiText() {
+        String text = "\\u6211\\u662F\\u5730\\u7403\\uD83C\\uDF0D"; // 我是地球🌍
+        Parser parser = new Parser("\"" + text + "\"");
+        JsonValue value = parser.parse();
+        Assertions.assertTrue(value instanceof JsonString);
+        JsonString str = (JsonString) value;
+        Assertions.assertEquals("我是地球\uD83C\uDF0D", str.toString());
+    }
+
+    @Test
     void parseBooleanTrue() {
         Parser parser = new Parser("true");
         JsonValue value = parser.parse();
