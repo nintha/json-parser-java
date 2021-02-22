@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group 'org.example'
@@ -7,6 +8,7 @@ version '1.0-SNAPSHOT'
 
 sourceCompatibility = 11
 compileJava.options.encoding = 'UTF-8'
+mainClassName = 'top.nintha.json.Main'
 
 repositories {
     maven {url 'http://maven.aliyun.com/nexus/content/groups/public/'}
